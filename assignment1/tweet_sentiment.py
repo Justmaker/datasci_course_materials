@@ -2,11 +2,10 @@ import sys
 import json
 
 
-def test_10_tweets(tweet_file, sent_dict):
+def sent_tweets(tweet_file, sent_dict):
     """Test on 10 first lines from tweet file
 
     """
-    count = 0
 
     for line in tweet_file.readlines():
         tweet_infos = json.loads(line)
@@ -18,9 +17,9 @@ def test_10_tweets(tweet_file, sent_dict):
                     analyse_text(text, sent_dict)
                 else:
                     print 'error'
-                count += 1
-                if count > 50:
-                    break
+            else:
+                print 0
+
         except Exception, e:
             print 'Error on tweet:'
             print tweet_infos
@@ -48,9 +47,14 @@ def analyse_text(text, sent_dict):
 
 
 def main():
-    sent_dict = extract_sent_dict('AFINN-111.txt')
-    tweet_file = open('output.txt')
-    test_10_tweets(tweet_file, sent_dict)
+    if len(sys.argv) >= 2:
+        sent_file_path = sys.argv[1]
+        tweet_file = open(sys.argv[2])
+    else:
+        sent_file_path = 'AFINN-111.txt'
+        tweet_file = open('output.txt')
+    sent_dict = extract_sent_dict(sent_file_path)
+    sent_tweets(tweet_file, sent_dict)
 
 if __name__ == '__main__':
     main()
